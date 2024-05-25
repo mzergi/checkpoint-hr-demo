@@ -7,7 +7,7 @@ trigger:
 - develop
 
 pool:
-  vmImage: 'windows-latest'
+  name: Self Hosted Docker
 
 variables:
   solution: '**/*.sln'
