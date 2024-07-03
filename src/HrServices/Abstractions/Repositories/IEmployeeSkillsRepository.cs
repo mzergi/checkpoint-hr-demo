@@ -1,6 +1,6 @@
 ﻿using HrServices.Entities;
 
-namespace HrDataAccess.Abstraction
+namespace HrServices.Abstractions.Repositories
 {
     public interface IEmployeeSkillsRepository : IBaseRepository<EmployeeSkill>
     {

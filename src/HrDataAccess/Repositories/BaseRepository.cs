@@ -1,6 +1,5 @@
-﻿using HrDataAccess.Abstraction;
+﻿using HrServices.Abstractions.Repositories;
 using HrServices.Entities;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace HrDataAccess.Repositories

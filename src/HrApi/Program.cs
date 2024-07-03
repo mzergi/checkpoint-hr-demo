@@ -1,7 +1,7 @@
 using HrApi.Options;
 using HrDataAccess;
-using HrDataAccess.Abstraction;
 using HrDataAccess.Repositories;
+using HrServices.Abstractions.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;

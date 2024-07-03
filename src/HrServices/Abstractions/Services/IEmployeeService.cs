@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace HrServices.Abstractions
+namespace HrServices.Abstractions.Services
 {
     interface IEmployeeService : ICrudService<CreateEmployee, UpdateEmployee, EmployeeDto, Employee>
     {

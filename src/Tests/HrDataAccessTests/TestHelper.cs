@@ -1,8 +1,8 @@
 ﻿using AutoBogus;
 using Bogus;
 using HrDataAccess;
-using HrDataAccess.Abstraction;
 using HrDataAccess.Repositories;
+using HrServices.Abstractions.Repositories;
 using HrServices.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;

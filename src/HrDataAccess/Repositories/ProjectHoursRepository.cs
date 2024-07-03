@@ -1,4 +1,4 @@
-﻿using HrDataAccess.Abstraction;
+﻿using HrServices.Abstractions.Repositories;
 using HrServices.Entities;
 
 namespace HrDataAccess.Repositories
