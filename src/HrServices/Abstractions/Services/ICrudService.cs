@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using HrServices.DTOs;
 
 namespace HrServices.Abstractions.Services
 {
-    public interface ICrudService<TCreateModel, TUpdateModel, TReturnModel, TEntity>
+    public interface ICrudService<TEntity>
     {
         // todo: paged get
-        public Task<TReturnModel> CreateAsync(TCreateModel model);
-        public Task<TReturnModel> UpdateAsync(TUpdateModel model);
-        public Task<TReturnModel> DeleteAsync(TEntity entity);
-        public Task<TReturnModel> GetByIdAsync(Guid id);
-        public Task<TReturnModel> GetFilteredAsync(Func<TEntity, bool> predicate);
+        public Task<TEntity> CreateAsync(TEntity model);
+        public Task<TEntity> UpdateAsync(TEntity model);
+        public Task<TEntity> DeleteAsync(Guid Id);
+        public Task<TEntity> GetByIdAsync(Guid id);
+        public Task<Page<TEntity>> GetPagedAsync();
+        public Task<TEntity> GetFilteredAsync(Func<TEntity, bool> predicate);
     }
 }

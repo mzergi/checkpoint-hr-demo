@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HrServices.Entities
 {
-    public class Employee : BaseEntity, IPerson
+    public class Employee : Person
     {
         // Person interface implementation
         public string FirstName { get; set; }
@@ -27,9 +27,9 @@ namespace HrServices.Entities
         public int PaidVacationsPerYear { get; set; }
         public Employment? CurrentEmployment 
         {
-            get => Employments.FirstOrDefault(e => e.ContractStart < DateTime.Now && (!e.ContractEnd.HasValue || e.ContractEnd > DateTime.Now));
+            get => Employments?.FirstOrDefault(e => e.ContractStart < DateTime.Now && (!e.ContractEnd.HasValue || e.ContractEnd > DateTime.Now));
         }
-
+    
         public ICollection<Employment> Employments { get; set; }
         public ICollection<EmployeeSkill> EmployeeSkills { get; set; }
         public ICollection<Skill> Skills { get; set; }

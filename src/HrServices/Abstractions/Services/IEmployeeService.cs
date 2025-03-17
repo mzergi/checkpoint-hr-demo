@@ -1,15 +1,8 @@
-﻿using HrServices.DTOs.Employees;
-using HrServices.Entities;
-using HrServices.Models.Employees;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using HrServices.Entities;
 
 namespace HrServices.Abstractions.Services
 {
-    interface IEmployeeService : ICrudService<CreateEmployee, UpdateEmployee, EmployeeDto, Employee>
+    public interface IEmployeeService : ICrudService<Employee>
     {
     }
 }

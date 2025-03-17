@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HrServices.Entities
 {
-    public class Candidate : BaseEntity, IPerson
+    public class Candidate : Person
     {
         public DateTime AppliedOn { get; set; }
         public DateTime LastStateChange { get; set; }

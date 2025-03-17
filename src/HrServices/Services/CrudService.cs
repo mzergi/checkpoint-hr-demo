@@ -1,39 +1,47 @@
 ﻿using HrServices.Abstractions.Repositories;
 using HrServices.Abstractions.Services;
+using HrServices.DTOs;
 using HrServices.Entities;
 
 namespace HrServices.Services
 {
     // todo: add automapper
-    public class CrudService<TCreateModel, TUpdateModel, TReturnModel, TEntity> : ICrudService<TCreateModel, TUpdateModel, TReturnModel, TEntity> where TEntity : BaseEntity
+    public class CrudService<TEntity> : ICrudService<TEntity> where TEntity : BaseEntity
     {
-        private IBaseRepository<TEntity> repository { get; set; }
-        public CrudService(IBaseRepository<TEntity> _repository) {
-            repository = _repository;
+        private IBaseRepository<TEntity> Repository { get; set; }
+        public CrudService(IBaseRepository<TEntity> repository) {
+            Repository = repository;
         }
-        public async Task<TReturnModel> CreateAsync(TCreateModel model)
+        public async Task<TEntity> CreateAsync(TEntity model)
         {
+            return await Repository.AddAsync(model);
+        }
+
+        public async Task<TEntity> DeleteAsync(Guid id)
+        {
+            return await Repository.DeleteByIdAsync(id);
+        }
+
+        public async Task<TEntity> GetByIdAsync(Guid id)
+        {
+            return await Repository.GetByIdAsync(id) ?? throw new InvalidOperationException("Entity does not exist.");
+        }
+
+        public Task<Page<TEntity>> GetPagedAsync()
+        {
+            // todo paged
             throw new NotImplementedException();
         }
 
-        public Task<TReturnModel> DeleteAsync(TEntity entity)
+        public Task<TEntity> GetFilteredAsync(Func<TEntity, bool> predicate)
         {
+            // todo paged
             throw new NotImplementedException();
         }
 
-        public Task<TReturnModel> GetByIdAsync(Guid id)
+        public async Task<TEntity> UpdateAsync(TEntity model)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task<TReturnModel> GetFilteredAsync(Func<TEntity, bool> predicate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task<TReturnModel> UpdateAsync(TUpdateModel model)
-        {
-            throw new NotImplementedException();
+            return await Repository.UpdateEntityAsync(model);
         }
     }
 }

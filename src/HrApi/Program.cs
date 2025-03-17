@@ -2,6 +2,8 @@ using HrApi.Options;
 using HrDataAccess;
 using HrDataAccess.Repositories;
 using HrServices.Abstractions.Repositories;
+using HrServices.Abstractions.Services;
+using HrServices.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -64,6 +66,8 @@ builder.Services.AddScoped<IVacationsRepository, VacationsRepository>();
 builder.Services.AddScoped<IVacationTypesRepository, VacationTypesRepository>();
 builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 
+builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
 
 var app = builder.Build();
 
@@ -79,9 +83,10 @@ app.UseCors(options => options.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(
 
 app.UseRouting();
 
-app.UseAuthentication();
-app.UseAuthorization();
+// app.UseAuthentication();
+// app.UseAuthorization();
 
-app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireAuthorization(ApiScopePolicy); });
+// app.UseEndpoints(endpoints => { endpoints.MapControllers().RequireAuthorization(ApiScopePolicy); });
+app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();

@@ -1,8 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using HrServices.Entities;
 
 namespace HrServices.Models.Persons
 {
-    public class Person : IPerson
+    public class Person : BaseEntity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }

@@ -1,11 +1,9 @@
-﻿using HrServices.Abstractions.Services;
-using HrServices.DTOs.Employees;
+﻿using HrServices.Abstractions.Repositories;
+using HrServices.Abstractions.Services;
 using HrServices.Entities;
-using HrServices.Models.Employees;
 
 namespace HrServices.Services
 {
-    public class EmployeeService : CrudService<CreateEmployee, UpdateEmployee, EmployeeDto, Employee>, IEmployeeService
-    {
-    }
+    public class EmployeeService(IEmployeeRepository repository)
+        : CrudService<Employee>(repository), IEmployeeService;
 }
