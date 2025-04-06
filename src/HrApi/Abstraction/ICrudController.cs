@@ -2,12 +2,12 @@
 
 namespace HrApi.Abstraction;
 
-public interface ICrudController<TEntity>
+public interface ICrudController<TEntity, TCreateEntity, TUpdateEntity>
 {
     public Task<IActionResult> GetPaged();
 
     public Task<IActionResult> Get(Guid id);
-    public Task<IActionResult> Post(TEntity value);
-    public Task<IActionResult> Put(TEntity value);
+    public Task<IActionResult> Create(TCreateEntity value);
+    public Task<IActionResult> Update(Guid id, TUpdateEntity value);
     public Task Delete(Guid id);
 }

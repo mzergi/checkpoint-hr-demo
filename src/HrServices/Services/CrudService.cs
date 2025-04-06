@@ -39,8 +39,9 @@ namespace HrServices.Services
             throw new NotImplementedException();
         }
 
-        public async Task<TEntity> UpdateAsync(TEntity model)
+        public async Task<TEntity> UpdateAsync(Guid id, TEntity model)
         {
+            model.Id = id;
             return await Repository.UpdateEntityAsync(model);
         }
     }

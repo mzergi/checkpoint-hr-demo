@@ -1,19 +1,29 @@
-﻿using HrApi.Abstraction;
+﻿using AutoMapper;
+using HrApi.Abstraction;
 using HrServices.Entities;
 using HrServices.Abstractions.Services;
+using HrServices.DTOs.Employees;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeesController(IEmployeeService service) : ControllerBase, ICrudController<Employee>
+public class EmployeesController : ControllerBase, ICrudController<Employee, EmployeeCreateDTO, EmployeeUpdateDTO>
 {
-    private IEmployeeService Service { get; set; } = service;
+    private IEmployeeService Service;
+    private IMapper Mapper;
+
+    public EmployeesController(IEmployeeService service, IMapper mapper)
+    {
+        Service = service;
+        Mapper = mapper;
+    }
     
     [HttpGet]
     public async Task<IActionResult> GetPaged()
     {
+        // todo: paging implementation
         var result = await Service.GetPagedAsync();
 
         return Ok(result);
@@ -28,19 +38,20 @@ public class EmployeesController(IEmployeeService service) : ControllerBase, ICr
     }
     
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] Employee value)
+    public async Task<IActionResult> Create([FromBody] EmployeeCreateDTO value)
     {
-        // todo: create DTO
-        var result = await Service.CreateAsync(value);
+        var model = Mapper.Map<Employee>(value);
+        var result = await Service.CreateAsync(model);
 
         return Ok(result);
     }
     
-    [HttpPut]
-    public async Task<IActionResult> Put([FromBody] Employee value)
+    [HttpPut("{id}")]
+    public async Task<IActionResult> Update(Guid id, [FromBody] EmployeeUpdateDTO value)
     {
-        // todo: update DTO
-        var result = await Service.UpdateAsync(value);
+        var entity = await Service.GetByIdAsync(id);
+        var model = Mapper.Map(value, entity);
+        var result = await Service.UpdateAsync(id, model);
 
         return Ok(result);
     }

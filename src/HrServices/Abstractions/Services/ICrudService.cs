@@ -11,7 +11,7 @@ namespace HrServices.Abstractions.Services
     {
         // todo: paged get
         public Task<TEntity> CreateAsync(TEntity model);
-        public Task<TEntity> UpdateAsync(TEntity model);
+        public Task<TEntity> UpdateAsync(Guid id, TEntity model);
         public Task<TEntity> DeleteAsync(Guid Id);
         public Task<TEntity> GetByIdAsync(Guid id);
         public Task<Page<TEntity>> GetPagedAsync();

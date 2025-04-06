@@ -3,6 +3,7 @@ using HrDataAccess;
 using HrDataAccess.Repositories;
 using HrServices.Abstractions.Repositories;
 using HrServices.Abstractions.Services;
+using HrServices.AutoMapper;
 using HrServices.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -67,6 +68,9 @@ builder.Services.AddScoped<IVacationTypesRepository, VacationTypesRepository>();
 builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+
+// add automapper
+builder.Services.AddAutoMapper(typeof(EmployeeProfile)); // add more lines here for more profiles
 
 
 var app = builder.Build();

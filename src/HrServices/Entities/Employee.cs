@@ -5,17 +5,6 @@ namespace HrServices.Entities
 {
     public class Employee : Person
     {
-        // Person interface implementation
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string MothersName { get; set; }
-        public DateTime BirthDate { get; set; }
-        [EmailAddress]
-        public string Email { get; set; }
-        [Phone]
-        public string PhoneNumber { get; set; }
-        public string Sex { get; set; }
-
         // Employee specific data
         public string BirthPlace { get; set; }
         public string TaxNumber { get; set; }
