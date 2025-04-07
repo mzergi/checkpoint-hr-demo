@@ -3,6 +3,7 @@ using HrApi.Abstraction;
 using HrServices.Entities;
 using HrServices.Abstractions.Services;
 using HrServices.DTOs.Employees;
+using HrServices.DTOs.Filters;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrApi.Controllers;
@@ -21,10 +22,9 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     }
     
     [HttpGet]
-    public async Task<IActionResult> GetPaged()
+    public async Task<IActionResult> GetPaged([FromQuery] PageFilters pageFilters)
     {
-        // todo: paging implementation
-        var result = await Service.GetPagedAsync();
+        var result = await Service.GetPagedAsync(pageFilters);
 
         return Ok(result);
     }
@@ -49,9 +49,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] EmployeeUpdateDTO value)
     {
-        var entity = await Service.GetByIdAsync(id);
-        var model = Mapper.Map(value, entity);
-        var result = await Service.UpdateAsync(id, model);
+        var result = await Service.UpdateAsync(id, value);
 
         return Ok(result);
     }

@@ -1,4 +1,5 @@
 ﻿using HrServices.Abstractions.Repositories;
+using HrServices.DTOs.Filters;
 using HrServices.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -62,9 +63,38 @@ namespace HrDataAccess.Repositories
             return await Context.Set<T>().Where(s => s.Id == id && s.IsDeleted == isDeleted).FirstOrDefaultAsync();
         }
 
-        public ICollection<T> GetQuery(Func<T, bool> predicate, bool isDeleted = false)
+        public IQueryable<T> GetQuery(Func<T, bool> predicate, bool isDeleted = false)
         {
-            return Context.Set<T>().Where(predicate).Where(s => s.IsDeleted == isDeleted).ToList();
+            // todo: QueryProvider
+            // this could be improved by extracting to a private function but I couldnt figure it out
+            bool FinalPredicate(T s) => predicate(s) && s.IsDeleted == isDeleted;
+            
+            return Context.Set<T>().Where((Func<T, bool>)FinalPredicate).AsQueryable();
+        }
+
+        public IQueryable<T> GetQuery(Func<T, bool> predicate, PageFilters pageFilters, bool isDeleted = false)
+        {
+            // todo: QueryProvider
+
+            return GetQuery(predicate, isDeleted)
+                .Skip(pageFilters.PageSize * pageFilters.CurrentPage)
+                .Take(pageFilters.PageSize);
+        }
+
+        public async Task<ICollection<T>> GetQueriedListAsync(Func<T, bool> predicate, bool isDeleted = false)
+        {
+            // todo: QueryProvider
+            // todo: this throws an exception as you can't call async
+            // todo: removed async for now
+            return GetQuery(predicate, isDeleted).ToList();
+        }
+
+        public async Task<ICollection<T>> GetQueriedListAsync(Func<T, bool> predicate, PageFilters pageFilters, bool isDeleted = false)
+        {
+            // todo: QueryProvider
+            // todo: this throws an exception as you can't call async
+            // todo: removed async for now
+            return GetQuery(predicate, pageFilters, isDeleted).ToList();
         }
 
         public async Task<ICollection<T>> UpdateEntitiesAsync(ICollection<T> entities)

@@ -70,7 +70,10 @@ builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 
 // add automapper
-builder.Services.AddAutoMapper(typeof(EmployeeProfile)); // add more lines here for more profiles
+builder.Services.AddAutoMapper(
+    typeof(EmployeeProfile),
+    typeof(PageProfile)
+    );
 
 
 var app = builder.Build();
