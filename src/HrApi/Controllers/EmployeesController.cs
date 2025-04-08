@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Collections.ObjectModel;
+using AutoMapper;
 using HrApi.Abstraction;
 using HrServices.Entities;
 using HrServices.Abstractions.Services;
@@ -44,6 +45,18 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
         var result = await Service.CreateAsync(model);
 
         return Ok(result);
+    }
+    
+    [HttpPost("batch")]
+    public async Task<IActionResult> Create([FromBody] ICollection<EmployeeCreateDTO> values)
+    {
+        List<Task<Employee>> tasks = new List<Task<Employee>>();
+        values.ForEach(value =>
+        {
+            tasks.Add(Service.CreateAsync(value));
+        });
+        var results = await Task.WhenAll(tasks);
+        return Ok(results);
     }
     
     [HttpPut("{id}")]

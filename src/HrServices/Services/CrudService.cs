@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System.Linq.Expressions;
+using AutoMapper;
 using HrServices.Abstractions.Repositories;
 using HrServices.Abstractions.Services;
 using HrServices.DTOs;
@@ -7,7 +8,6 @@ using HrServices.Entities;
 
 namespace HrServices.Services
 {
-    // todo: add automapper
     public class CrudService<TEntity, TCreateDto, TUpdateDto> : ICrudService<TEntity, TCreateDto, TUpdateDto> where TEntity : BaseEntity
     {
         private IBaseRepository<TEntity> Repository { get; set; }
@@ -41,19 +41,24 @@ namespace HrServices.Services
 
         public async Task<Page<TEntity>> GetPagedAsync(PageFilters pageFilters)
         {
-            return await GetFilteredPageAsync(_ => true, pageFilters);
+            return await GetFilteredPageAsync(pageFilters: pageFilters);
         }
 
-        public async Task<ICollection<TEntity>> GetFilteredAsync(Func<TEntity, bool> predicate)
+        public async Task<ICollection<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
+            PageFilters? pageFilters = null)
         {
-            return await Repository.GetQueriedListAsync(predicate);
+            return await Repository.GetQueriedListAsync(filter, orderBy, pageFilters);
         }
 
-        public async Task<Page<TEntity>> GetFilteredPageAsync(Func<TEntity, bool> predicate, PageFilters pageFilters)
+        public async Task<Page<TEntity>> GetFilteredPageAsync(PageFilters pageFilters, 
+            Expression<Func<TEntity, bool>>? filter = null,
+            Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null)
         {
             var result = Mapper.Map<PageFilters, Page<TEntity>>(pageFilters);
-            result.Entries = await Repository.GetQueriedListAsync(predicate, pageFilters);
-            result.TotalPages = (result.Entries.Count + pageFilters.PageSize - 1) / pageFilters.PageSize;
+            result.Entries = await Repository.GetQueriedListAsync(filter, orderBy, pageFilters);
+            result.TotalItems = await Repository.CountAsync();
+            result.TotalPages = (result.TotalItems + result.PageSize - 1) / result.PageSize;
             return result;
         }
 

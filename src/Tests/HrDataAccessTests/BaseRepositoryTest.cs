@@ -88,7 +88,7 @@ namespace HrDataAccessTests
             await repository.DeleteAllAsync();
 
             var result = repository.GetQuery(s => createdIds.Contains(s.Id)).ToList();
-            var softDeleteResult = repository.GetQuery(s => createdIds.Contains(s.Id), true).ToList();
+            var softDeleteResult = repository.GetQuery(s => createdIds.Contains(s.Id), isDeleted: true).ToList();
 
             // assert
             Assert.Equal(10, created.Count);

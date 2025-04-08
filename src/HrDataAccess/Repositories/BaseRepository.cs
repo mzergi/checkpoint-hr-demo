@@ -1,4 +1,5 @@
-﻿using HrServices.Abstractions.Repositories;
+﻿using System.Linq.Expressions;
+using HrServices.Abstractions.Repositories;
 using HrServices.DTOs.Filters;
 using HrServices.Entities;
 using Microsoft.EntityFrameworkCore;
@@ -63,38 +64,34 @@ namespace HrDataAccess.Repositories
             return await Context.Set<T>().Where(s => s.Id == id && s.IsDeleted == isDeleted).FirstOrDefaultAsync();
         }
 
-        public IQueryable<T> GetQuery(Func<T, bool> predicate, bool isDeleted = false)
+        public IQueryable<T> GetQuery(Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            PageFilters? pageFilters = null,
+            bool isDeleted = false)
         {
-            // todo: QueryProvider
-            // this could be improved by extracting to a private function but I couldnt figure it out
-            bool FinalPredicate(T s) => predicate(s) && s.IsDeleted == isDeleted;
-            
-            return Context.Set<T>().Where((Func<T, bool>)FinalPredicate).AsQueryable();
+            IQueryable<T> query = Context.Set<T>();
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
+            if (pageFilters != null)
+            {
+                query = query.Skip(pageFilters.PageSize * pageFilters.CurrentPage)
+                    .Take(pageFilters.PageSize);
+            }
+
+            query = query.Where(s => s.IsDeleted == isDeleted);
+
+            return orderBy != null ? orderBy(query) : query;
         }
 
-        public IQueryable<T> GetQuery(Func<T, bool> predicate, PageFilters pageFilters, bool isDeleted = false)
+        public async Task<ICollection<T>> GetQueriedListAsync(Expression<Func<T, bool>>? filter = null,
+            Func<IQueryable<T>, IOrderedQueryable<T>>? orderBy = null,
+            PageFilters? pageFilters = null,
+            bool isDeleted = false)
         {
-            // todo: QueryProvider
-
-            return GetQuery(predicate, isDeleted)
-                .Skip(pageFilters.PageSize * pageFilters.CurrentPage)
-                .Take(pageFilters.PageSize);
-        }
-
-        public async Task<ICollection<T>> GetQueriedListAsync(Func<T, bool> predicate, bool isDeleted = false)
-        {
-            // todo: QueryProvider
-            // todo: this throws an exception as you can't call async
-            // todo: removed async for now
-            return GetQuery(predicate, isDeleted).ToList();
-        }
-
-        public async Task<ICollection<T>> GetQueriedListAsync(Func<T, bool> predicate, PageFilters pageFilters, bool isDeleted = false)
-        {
-            // todo: QueryProvider
-            // todo: this throws an exception as you can't call async
-            // todo: removed async for now
-            return GetQuery(predicate, pageFilters, isDeleted).ToList();
+            return await GetQuery(filter, orderBy, pageFilters, isDeleted).ToListAsync();
         }
 
         public async Task<ICollection<T>> UpdateEntitiesAsync(ICollection<T> entities)
@@ -109,6 +106,11 @@ namespace HrDataAccess.Repositories
             Context.Set<T>().Update(entity);
             await Context.SaveChangesAsync();
             return entity;
+        }
+
+        public async Task<int> CountAsync()
+        {
+            return await Context.Set<T>().CountAsync();
         }
     }
 }

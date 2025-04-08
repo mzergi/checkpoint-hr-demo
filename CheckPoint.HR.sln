@@ -18,6 +18,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HrDataAccess", "src\HrDataAccess\HrDataAccess.csproj", "{84C9A765-A0C3-4822-B394-D6E0051BC884}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BDD6C359-0A76-4DA1-A9ED-87E3AABA7AF1}"
+	ProjectSection(SolutionItems) = preProject
+		src\Tests\db-seed.json = src\Tests\db-seed.json
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HrDataAccessTests", "src\Tests\HrDataAccessTests\HrDataAccessTests.csproj", "{CE7A8650-5212-4BD4-8FE8-29047AA93F5F}"
 EndProject
