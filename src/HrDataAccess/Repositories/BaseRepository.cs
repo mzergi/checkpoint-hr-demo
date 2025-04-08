@@ -14,7 +14,8 @@ namespace HrDataAccess.Repositories
         {
             this.Context = context;
         }
-
+        // todo: CreatedAt is uninitialized
+        // todo: UpdatedAt is uninitialized
         public async Task<T> AddAsync(T entity)
         {
             Context.Set<T>().Add(entity);
@@ -93,14 +94,16 @@ namespace HrDataAccess.Repositories
         {
             return await GetQuery(filter, orderBy, pageFilters, isDeleted).ToListAsync();
         }
-
+        // todo: CreatedAt is uninitialized
+        // todo: UpdatedAt is uninitialized
         public async Task<ICollection<T>> UpdateEntitiesAsync(ICollection<T> entities)
         {
             Context.Set<T>().UpdateRange(entities);
             await Context.SaveChangesAsync();
             return entities;
         }
-
+        // todo: CreatedAt is uninitialized
+        // todo: UpdatedAt is uninitialized
         public async Task<T> UpdateEntityAsync(T entity)
         {
             Context.Set<T>().Update(entity);
@@ -110,7 +113,7 @@ namespace HrDataAccess.Repositories
 
         public async Task<int> CountAsync()
         {
-            return await Context.Set<T>().CountAsync();
+            return await Context.Set<T>().Where(s => !s.IsDeleted).CountAsync();
         }
     }
 }

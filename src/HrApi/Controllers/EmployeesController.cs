@@ -15,7 +15,8 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
 {
     private IEmployeeService Service;
     private IMapper Mapper;
-
+    // todo: creating data with DateTime is a bit unreliable, especially considering future excel uploads
+    // todo: maybe excel upload implementation for batch endpoint?
     public EmployeesController(IEmployeeService service, IMapper mapper)
     {
         Service = service;
