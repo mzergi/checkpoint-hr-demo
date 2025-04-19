@@ -14,6 +14,9 @@ public class SkillsController : ControllerBase, ICrudController<Skill, SkillCrea
 {
     private readonly ISkillService Service;
     private readonly IMapper Mapper;
+    
+    // todo: create BaseApiTest class and test controllers
+    // todo after: add more controllers
 
     public SkillsController(IMapper mapper, ISkillService service)
     {
@@ -70,5 +73,12 @@ public class SkillsController : ControllerBase, ICrudController<Skill, SkillCrea
     public async Task Delete(Guid id)
     {
         await Service.DeleteAsync(id);
+    }
+
+    [HttpGet("{id}/employees")]
+    public async Task<IActionResult> GetEmployeesOfSkill(Guid id)
+    {
+        var result = await Service.GetEmployeesOfSkill(id);
+        return Ok(result);
     }
 }

@@ -39,6 +39,11 @@ namespace HrServices.Services
             return await Repository.GetByIdAsync(id) ?? throw new InvalidOperationException("Entity does not exist.");
         }
 
+        public async Task<ICollection<TEntity>> GetByIdsAsync(ICollection<Guid> ids)
+        {
+            return await Repository.GetQueriedListAsync(e => ids.Contains(e.Id));
+        }
+
         public async Task<Page<TEntity>> GetPagedAsync(PageFilters pageFilters)
         {
             return await GetFilteredPageAsync(pageFilters: pageFilters);

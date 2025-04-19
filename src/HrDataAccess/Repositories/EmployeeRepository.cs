@@ -5,6 +5,9 @@ namespace HrDataAccess.Repositories
 {
     public class EmployeeRepository : BaseRepository<Employee>, IEmployeeRepository
     {
-        public EmployeeRepository(PostgresHrDbContext context) : base(context) { }
+
+        public EmployeeRepository(PostgresHrDbContext context) : base(context)
+        {
+        }
     }
 }

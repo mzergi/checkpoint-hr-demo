@@ -13,18 +13,20 @@ namespace HrApi.Controllers;
 [ApiController]
 public class EmployeesController : ControllerBase, ICrudController<Employee, EmployeeCreateDTO, EmployeeUpdateDTO>
 {
-    private readonly IEmployeeService Service;
+    private readonly IEmployeeService EmployeeService;
+    private readonly ISkillService SkillService;
     private readonly IMapper Mapper;
-    public EmployeesController(IEmployeeService service, IMapper mapper)
+    public EmployeesController(IEmployeeService employeeService, ISkillService skillService, IMapper mapper)
     {
-        Service = service;
+        EmployeeService = employeeService;
+        SkillService = skillService;
         Mapper = mapper;
     }
     
     [HttpGet]
     public async Task<IActionResult> GetPaged([FromQuery] PageFilters pageFilters)
     {
-        var result = await Service.GetPagedAsync(pageFilters);
+        var result = await EmployeeService.GetPagedAsync(pageFilters);
 
         return Ok(result);
     }
@@ -32,7 +34,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(Guid id)
     {
-        var result = await Service.GetByIdAsync(id);
+        var result = await EmployeeService.GetByIdAsync(id);
 
         return Ok(result);
     }
@@ -41,7 +43,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     public async Task<IActionResult> Create([FromBody] EmployeeCreateDTO value)
     {
         var model = Mapper.Map<Employee>(value);
-        var result = await Service.CreateAsync(model);
+        var result = await EmployeeService.CreateAsync(model);
 
         return Ok(result);
     }
@@ -52,7 +54,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
         List<Task<Employee>> tasks = new List<Task<Employee>>();
         values.ForEach(value =>
         {
-            tasks.Add(Service.CreateAsync(value));
+            tasks.Add(EmployeeService.CreateAsync(value));
         });
         var results = await Task.WhenAll(tasks);
         return Ok(results);
@@ -61,7 +63,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     [HttpPut("{id}")]
     public async Task<IActionResult> Update(Guid id, [FromBody] EmployeeUpdateDTO value)
     {
-        var result = await Service.UpdateAsync(id, value);
+        var result = await EmployeeService.UpdateAsync(id, value);
 
         return Ok(result);
     }
@@ -69,6 +71,14 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     [HttpDelete("{id}")]
     public async Task Delete(Guid id)
     {
-        await Service.DeleteAsync(id);
+        await EmployeeService.DeleteAsync(id);
+    }
+
+    [HttpPut("{id}/skills")]
+    public async Task<IActionResult> UpdateSkillsForEmployee(Guid id, [FromBody] ICollection<Guid> skillIds)
+    {
+        var result = await EmployeeService.UpdateSkillsForEmployee(id, skillIds);
+        return Ok(result);
+        // todo: EmployeeSkills is not saved because we have to implement additional logic in the repo
     }
 }

@@ -17,10 +17,25 @@ namespace HrDataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "9.0.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+
+            modelBuilder.Entity("EmployeeSkill", b =>
+                {
+                    b.Property<Guid>("EmployeesId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("SkillsId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("EmployeesId", "SkillsId");
+
+                    b.HasIndex("SkillsId");
+
+                    b.ToTable("EmployeeSkill");
+                });
 
             modelBuilder.Entity("HrServices.Entities.Candidate", b =>
                 {
@@ -88,8 +103,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.ToTable("Candidates");
                 });
 
@@ -119,8 +132,6 @@ namespace HrDataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("DocumentTypes");
                 });
@@ -206,8 +217,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.ToTable("Employees");
                 });
 
@@ -251,8 +260,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeDeadlines");
@@ -292,8 +299,6 @@ namespace HrDataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("DocumentTypeId");
 
@@ -339,8 +344,6 @@ namespace HrDataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("EmployeeId");
 
@@ -407,8 +410,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("Employments");
@@ -455,8 +456,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("ProjectHours");
@@ -495,8 +494,6 @@ namespace HrDataAccess.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.ToTable("Skills");
                 });
@@ -541,8 +538,6 @@ namespace HrDataAccess.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CreatedById");
 
                     b.HasIndex("EmployeeId");
 
@@ -590,8 +585,6 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.ToTable("VacationTypes");
                 });
 
@@ -636,63 +629,39 @@ namespace HrDataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("WorkingHours");
                 });
 
-            modelBuilder.Entity("HrServices.Entities.Candidate", b =>
+            modelBuilder.Entity("EmployeeSkill", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
+                    b.HasOne("HrServices.Entities.Employee", null)
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("EmployeesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("HrServices.Entities.DocumentType", b =>
-                {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
+                    b.HasOne("HrServices.Entities.Skill", null)
                         .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("CreatedBy");
-                });
-
-            modelBuilder.Entity("HrServices.Entities.Employee", b =>
-                {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("CreatedBy");
+                        .HasForeignKey("SkillsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("HrServices.Entities.EmployeeDeadline", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
-                        .WithMany()
+                        .WithMany("Deadlines")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("HrServices.Entities.EmployeeDocument", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.DocumentType", "DocumentType")
                         .WithMany("Documents")
                         .HasForeignKey("DocumentTypeId")
@@ -705,8 +674,6 @@ namespace HrDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("DocumentType");
 
                     b.Navigation("Employee");
@@ -714,10 +681,6 @@ namespace HrDataAccess.Migrations
 
             modelBuilder.Entity("HrServices.Entities.EmployeeSkill", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
                         .WithMany("EmployeeSkills")
                         .HasForeignKey("EmployeeId")
@@ -730,8 +693,6 @@ namespace HrDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Employee");
 
                     b.Navigation("Skill");
@@ -739,53 +700,28 @@ namespace HrDataAccess.Migrations
 
             modelBuilder.Entity("HrServices.Entities.Employment", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
                         .WithMany("Employments")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Employee");
                 });
 
             modelBuilder.Entity("HrServices.Entities.ProjectHour", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Employee");
-                });
-
-            modelBuilder.Entity("HrServices.Entities.Skill", b =>
-                {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("CreatedBy");
                 });
 
             modelBuilder.Entity("HrServices.Entities.Vacation", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
@@ -798,35 +734,18 @@ namespace HrDataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CreatedBy");
-
                     b.Navigation("Employee");
 
                     b.Navigation("VacationType");
                 });
 
-            modelBuilder.Entity("HrServices.Entities.VacationType", b =>
-                {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
-                    b.Navigation("CreatedBy");
-                });
-
             modelBuilder.Entity("HrServices.Entities.WorkingHour", b =>
                 {
-                    b.HasOne("HrServices.Entities.Employee", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById");
-
                     b.HasOne("HrServices.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("CreatedBy");
 
                     b.Navigation("Employee");
                 });
@@ -838,6 +757,8 @@ namespace HrDataAccess.Migrations
 
             modelBuilder.Entity("HrServices.Entities.Employee", b =>
                 {
+                    b.Navigation("Deadlines");
+
                     b.Navigation("EmployeeSkills");
 
                     b.Navigation("Employments");

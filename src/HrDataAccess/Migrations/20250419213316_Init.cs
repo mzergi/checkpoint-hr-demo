@@ -6,11 +6,56 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace HrDataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "Candidates",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    AppliedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    LastStateChange = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false),
+                    ExpectedSalary = table.Column<float>(type: "real", nullable: true),
+                    ApplicationState = table.Column<int>(type: "integer", nullable: false),
+                    FirstName = table.Column<string>(type: "text", nullable: false),
+                    LastName = table.Column<string>(type: "text", nullable: false),
+                    MothersName = table.Column<string>(type: "text", nullable: false),
+                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    Sex = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Candidates", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocumentTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentTypes", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Employees",
                 columns: table => new
@@ -40,52 +85,16 @@ namespace HrDataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Employees", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Employees_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "Candidates",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    AppliedOn = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    LastStateChange = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Comment = table.Column<string>(type: "text", nullable: false),
-                    ExpectedSalary = table.Column<float>(type: "real", nullable: true),
-                    ApplicationState = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false),
-                    FirstName = table.Column<string>(type: "text", nullable: false),
-                    LastName = table.Column<string>(type: "text", nullable: false),
-                    MothersName = table.Column<string>(type: "text", nullable: false),
-                    BirthDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
-                    Sex = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Candidates", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Candidates_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "DocumentTypes",
+                name: "Skills",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: false),
+                    Level = table.Column<int>(type: "integer", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
@@ -94,12 +103,28 @@ namespace HrDataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_DocumentTypes_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
+                    table.PrimaryKey("PK_Skills", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "VacationTypes",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: false),
+                    SubtractFromPaidVacation = table.Column<bool>(type: "boolean", nullable: false),
+                    SubtractFromWorkingHours = table.Column<bool>(type: "boolean", nullable: false),
+                    SalaryMultiplier = table.Column<float>(type: "real", nullable: false),
+                    ApplyForWholeDay = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_VacationTypes", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -122,12 +147,39 @@ namespace HrDataAccess.Migrations
                 {
                     table.PrimaryKey("PK_EmployeeDeadlines", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EmployeeDeadlines_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_EmployeeDeadlines_Employees_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "Employees",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "EmployeeDocuments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    EmployeeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ValidFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    ValidTill = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmployeeDocuments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_EmployeeDocuments_DocumentTypes_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
+                        principalTable: "DocumentTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_EmployeeDocuments_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
@@ -160,11 +212,6 @@ namespace HrDataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Employments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Employments_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Employments_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
@@ -193,66 +240,11 @@ namespace HrDataAccess.Migrations
                 {
                     table.PrimaryKey("PK_ProjectHours", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProjectHours_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_ProjectHours_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Skills",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    Description = table.Column<string>(type: "text", nullable: false),
-                    Level = table.Column<int>(type: "integer", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Skills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Skills_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "VacationTypes",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: false),
-                    SubtractFromPaidVacation = table.Column<bool>(type: "boolean", nullable: false),
-                    SubtractFromWorkingHours = table.Column<bool>(type: "boolean", nullable: false),
-                    SalaryMultiplier = table.Column<float>(type: "real", nullable: false),
-                    ApplyForWholeDay = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_VacationTypes", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_VacationTypes_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -276,11 +268,6 @@ namespace HrDataAccess.Migrations
                 {
                     table.PrimaryKey("PK_WorkingHours", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_WorkingHours_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_WorkingHours_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
@@ -289,38 +276,25 @@ namespace HrDataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeDocuments",
+                name: "EmployeeSkill",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    DocumentTypeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EmployeeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ValidFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ValidTill = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
+                    EmployeesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    SkillsId = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EmployeeDocuments", x => x.Id);
+                    table.PrimaryKey("PK_EmployeeSkill", x => new { x.EmployeesId, x.SkillsId });
                     table.ForeignKey(
-                        name: "FK_EmployeeDocuments_DocumentTypes_DocumentTypeId",
-                        column: x => x.DocumentTypeId,
-                        principalTable: "DocumentTypes",
+                        name: "FK_EmployeeSkill_Employees_EmployeesId",
+                        column: x => x.EmployeesId,
+                        principalTable: "Employees",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_EmployeeDocuments_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_EmployeeDocuments_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
+                        name: "FK_EmployeeSkill_Skills_SkillsId",
+                        column: x => x.SkillsId,
+                        principalTable: "Skills",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -344,11 +318,6 @@ namespace HrDataAccess.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_EmployeeSkills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmployeeSkills_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_EmployeeSkills_Employees_EmployeeId",
                         column: x => x.EmployeeId,
@@ -384,11 +353,6 @@ namespace HrDataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Vacations", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Vacations_Employees_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "Employees",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_Vacations_Employees_EmployeeId",
                         column: x => x.EmployeeId,
                         principalTable: "Employees",
@@ -403,29 +367,9 @@ namespace HrDataAccess.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Candidates_CreatedById",
-                table: "Candidates",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_DocumentTypes_CreatedById",
-                table: "DocumentTypes",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeDeadlines_CreatedById",
-                table: "EmployeeDeadlines",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_EmployeeDeadlines_EmployeeId",
                 table: "EmployeeDeadlines",
                 column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeDocuments_CreatedById",
-                table: "EmployeeDocuments",
-                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeDocuments_DocumentTypeId",
@@ -438,14 +382,9 @@ namespace HrDataAccess.Migrations
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employees_CreatedById",
-                table: "Employees",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeSkills_CreatedById",
-                table: "EmployeeSkills",
-                column: "CreatedById");
+                name: "IX_EmployeeSkill_SkillsId",
+                table: "EmployeeSkill",
+                column: "SkillsId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_EmployeeSkills_EmployeeId",
@@ -458,34 +397,14 @@ namespace HrDataAccess.Migrations
                 column: "SkillId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employments_CreatedById",
-                table: "Employments",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Employments_EmployeeId",
                 table: "Employments",
                 column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProjectHours_CreatedById",
-                table: "ProjectHours",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ProjectHours_EmployeeId",
                 table: "ProjectHours",
                 column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Skills_CreatedById",
-                table: "Skills",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Vacations_CreatedById",
-                table: "Vacations",
-                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Vacations_EmployeeId",
@@ -496,16 +415,6 @@ namespace HrDataAccess.Migrations
                 name: "IX_Vacations_VacationTypeId",
                 table: "Vacations",
                 column: "VacationTypeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_VacationTypes_CreatedById",
-                table: "VacationTypes",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_WorkingHours_CreatedById",
-                table: "WorkingHours",
-                column: "CreatedById");
 
             migrationBuilder.CreateIndex(
                 name: "IX_WorkingHours_EmployeeId",
@@ -524,6 +433,9 @@ namespace HrDataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmployeeDocuments");
+
+            migrationBuilder.DropTable(
+                name: "EmployeeSkill");
 
             migrationBuilder.DropTable(
                 name: "EmployeeSkills");

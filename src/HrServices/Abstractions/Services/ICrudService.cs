@@ -12,6 +12,7 @@ namespace HrServices.Abstractions.Services
         public Task<TEntity> UpdateAsync(Guid id, TUpdateDto dto);
         public Task<TEntity> DeleteAsync(Guid Id);
         public Task<TEntity> GetByIdAsync(Guid id);
+        public Task<ICollection<TEntity>> GetByIdsAsync(ICollection<Guid> ids);
         public Task<Page<TEntity>> GetPagedAsync(PageFilters pageFilters);
         public Task<ICollection<TEntity>> GetFilteredAsync(Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
