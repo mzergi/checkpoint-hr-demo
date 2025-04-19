@@ -6,5 +6,5 @@ using HrServices.Entities;
 
 namespace HrServices.Services;
 
-public class SkillService(IBaseRepository<Skill> repository, IMapper mapper)
+public class SkillService(ISkillsRepository repository, IMapper mapper)
     : CrudService<Skill, SkillCreateDTO, SkillUpdateDTO>(repository, mapper), ISkillService;

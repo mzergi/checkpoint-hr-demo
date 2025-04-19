@@ -1,24 +1,24 @@
-﻿using System.Collections.ObjectModel;
-using AutoMapper;
+﻿using AutoMapper;
 using HrApi.Abstraction;
-using HrServices.Entities;
 using HrServices.Abstractions.Services;
-using HrServices.DTOs.Employees;
 using HrServices.DTOs.Filters;
+using HrServices.DTOs.Skills;
+using HrServices.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HrApi.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class EmployeesController : ControllerBase, ICrudController<Employee, EmployeeCreateDTO, EmployeeUpdateDTO>
+public class SkillsController : ControllerBase, ICrudController<Skill, SkillCreateDTO, SkillUpdateDTO>
 {
-    private readonly IEmployeeService Service;
+    private readonly ISkillService Service;
     private readonly IMapper Mapper;
-    public EmployeesController(IEmployeeService service, IMapper mapper)
+
+    public SkillsController(IMapper mapper, ISkillService service)
     {
-        Service = service;
         Mapper = mapper;
+        Service = service;
     }
     
     [HttpGet]
@@ -38,18 +38,18 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     }
     
     [HttpPost]
-    public async Task<IActionResult> Create([FromBody] EmployeeCreateDTO value)
+    public async Task<IActionResult> Create([FromBody] SkillCreateDTO value)
     {
-        var model = Mapper.Map<Employee>(value);
+        var model = Mapper.Map<Skill>(value);
         var result = await Service.CreateAsync(model);
 
         return Ok(result);
     }
     
     [HttpPost("batch")]
-    public async Task<IActionResult> Create([FromBody] ICollection<EmployeeCreateDTO> values)
+    public async Task<IActionResult> Create([FromBody] ICollection<SkillCreateDTO> values)
     {
-        List<Task<Employee>> tasks = new List<Task<Employee>>();
+        List<Task<Skill>> tasks = new List<Task<Skill>>();
         values.ForEach(value =>
         {
             tasks.Add(Service.CreateAsync(value));
@@ -59,7 +59,7 @@ public class EmployeesController : ControllerBase, ICrudController<Employee, Emp
     }
     
     [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] EmployeeUpdateDTO value)
+    public async Task<IActionResult> Update(Guid id, [FromBody] SkillUpdateDTO value)
     {
         var result = await Service.UpdateAsync(id, value);
 

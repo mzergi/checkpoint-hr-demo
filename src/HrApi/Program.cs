@@ -68,11 +68,13 @@ builder.Services.AddScoped<IVacationTypesRepository, VacationTypesRepository>();
 builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+builder.Services.AddScoped<ISkillService, SkillService>();
 
 // add automapper
 builder.Services.AddAutoMapper(
     typeof(EmployeeProfile),
-    typeof(PageProfile)
+    typeof(PageProfile),
+    typeof(SkillProfile)
     );
 
 
