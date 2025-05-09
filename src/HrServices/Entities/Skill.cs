@@ -9,7 +9,7 @@ namespace HrServices.Entities
         public string Description { get; set; }
         public SeniorityLevels Level { get; set; }
         // todo: provide these in separate endpoint
-        public ICollection<EmployeeSkill> EmployeeSkills { get; set; }
+        [JsonIgnore]
         public ICollection<Employee> Employees { get; set; }
     }
 }

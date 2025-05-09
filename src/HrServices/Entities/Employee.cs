@@ -1,5 +1,6 @@
 ﻿using HrServices.Models.Persons;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace HrServices.Entities
 {
@@ -20,8 +21,8 @@ namespace HrServices.Entities
         }
     
         public ICollection<Employment> Employments { get; set; }
-        public ICollection<EmployeeSkill> EmployeeSkills { get; set; }
-        public ICollection<Skill> Skills { get; set; }
         public ICollection<EmployeeDeadline> Deadlines { get; set; }
+        [JsonIgnore]
+        public ICollection<Skill> Skills { get; set; }
     }
 }

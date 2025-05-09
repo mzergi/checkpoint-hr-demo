@@ -8,7 +8,6 @@ namespace HrDataAccess
         public DbSet<Employee> Employees {  get; set; }
         public DbSet<Employment> Employments {  get; set; }
         public DbSet<Skill> Skills {  get; set; }
-        public DbSet<EmployeeSkill> EmployeeSkills {  get; set; }
         public DbSet<Vacation> Vacations {  get; set; }
         public DbSet<VacationType> VacationTypes {  get; set; }
         public DbSet<WorkingHour> WorkingHours {  get; set; }
@@ -32,6 +31,13 @@ namespace HrDataAccess
                 .HasMany(e => e.Skills)
                 .WithMany(s => s.Employees)
                 .UsingEntity("EmployeeSkill");
+            modelBuilder.Entity<Skill>()
+                .HasMany(s => s.Employees)
+                .WithMany(s => s.Skills)
+                .UsingEntity("EmployeeSkill");
+            modelBuilder.Entity<Employee>()
+                .Navigation(e => e.Skills)
+                .AutoInclude();
         }
     }
 }

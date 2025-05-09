@@ -300,39 +300,6 @@ namespace HrDataAccess.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EmployeeSkills",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    EmployeeId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SkillId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsActiveEntryForEmployee = table.Column<bool>(type: "boolean", nullable: false),
-                    ActiveEntryForEmployeeFrom = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    ActiveEntryForEmployeeTill = table.Column<DateTime>(type: "timestamp with time zone", nullable: true),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    UpdatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    CreatedById = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    TenantId = table.Column<Guid>(type: "uuid", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_EmployeeSkills", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_EmployeeSkills_Employees_EmployeeId",
-                        column: x => x.EmployeeId,
-                        principalTable: "Employees",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_EmployeeSkills_Skills_SkillId",
-                        column: x => x.SkillId,
-                        principalTable: "Skills",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Vacations",
                 columns: table => new
                 {
@@ -387,16 +354,6 @@ namespace HrDataAccess.Migrations
                 column: "SkillsId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EmployeeSkills_EmployeeId",
-                table: "EmployeeSkills",
-                column: "EmployeeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_EmployeeSkills_SkillId",
-                table: "EmployeeSkills",
-                column: "SkillId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Employments_EmployeeId",
                 table: "Employments",
                 column: "EmployeeId");
@@ -436,9 +393,6 @@ namespace HrDataAccess.Migrations
 
             migrationBuilder.DropTable(
                 name: "EmployeeSkill");
-
-            migrationBuilder.DropTable(
-                name: "EmployeeSkills");
 
             migrationBuilder.DropTable(
                 name: "Employments");

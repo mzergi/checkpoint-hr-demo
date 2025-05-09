@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace HrDataAccess.Migrations
 {
     [DbContext(typeof(PostgresHrDbContext))]
-    [Migration("20250419213316_Init")]
+    [Migration("20250509182422_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -308,51 +308,6 @@ namespace HrDataAccess.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("EmployeeDocuments");
-                });
-
-            modelBuilder.Entity("HrServices.Entities.EmployeeSkill", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("ActiveEntryForEmployeeFrom")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime?>("ActiveEntryForEmployeeTill")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<Guid?>("CreatedById")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EmployeeId")
-                        .HasColumnType("uuid");
-
-                    b.Property<bool>("IsActiveEntryForEmployee")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<Guid>("SkillId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("SkillId");
-
-                    b.ToTable("EmployeeSkills");
                 });
 
             modelBuilder.Entity("HrServices.Entities.Employment", b =>
@@ -682,25 +637,6 @@ namespace HrDataAccess.Migrations
                     b.Navigation("Employee");
                 });
 
-            modelBuilder.Entity("HrServices.Entities.EmployeeSkill", b =>
-                {
-                    b.HasOne("HrServices.Entities.Employee", "Employee")
-                        .WithMany("EmployeeSkills")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("HrServices.Entities.Skill", "Skill")
-                        .WithMany("EmployeeSkills")
-                        .HasForeignKey("SkillId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Employee");
-
-                    b.Navigation("Skill");
-                });
-
             modelBuilder.Entity("HrServices.Entities.Employment", b =>
                 {
                     b.HasOne("HrServices.Entities.Employee", "Employee")
@@ -762,14 +698,7 @@ namespace HrDataAccess.Migrations
                 {
                     b.Navigation("Deadlines");
 
-                    b.Navigation("EmployeeSkills");
-
                     b.Navigation("Employments");
-                });
-
-            modelBuilder.Entity("HrServices.Entities.Skill", b =>
-                {
-                    b.Navigation("EmployeeSkills");
                 });
 #pragma warning restore 612, 618
         }

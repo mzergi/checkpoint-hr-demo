@@ -6,7 +6,7 @@ using HrServices.Entities;
 
 namespace HrServices.Services
 {
-    public class EmployeeService(IEmployeeRepository repository, IMapper mapper, ISkillService skillService)
+    public class EmployeeService(IEmployeeRepository repository, IEmployeeSkillsRepository employeeSkillsRepository, IMapper mapper, ISkillService skillService)
         : CrudService<Employee, EmployeeCreateDTO, EmployeeUpdateDTO>(repository, mapper), IEmployeeService
     {
         public async Task<ICollection<Skill>> UpdateSkillsForEmployee(Guid id, ICollection<Guid> skillIds)

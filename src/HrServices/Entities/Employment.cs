@@ -1,10 +1,12 @@
-﻿using HrServices.Enums;
+﻿using System.Text.Json.Serialization;
+using HrServices.Enums;
 
 namespace HrServices.Entities
 {
     public class Employment : BaseEntity
     {
         public Guid EmployeeId { get; set; }
+        [JsonIgnore]
         public Employee Employee { get; set; }
         /// <summary>
         /// default = 40 hour workweek
