@@ -69,12 +69,30 @@ builder.Services.AddScoped<IWorkingHoursRepository, WorkingHoursRepository>();
 
 builder.Services.AddScoped<IEmployeeService, EmployeeService>();
 builder.Services.AddScoped<ISkillService, SkillService>();
+builder.Services.AddScoped<ICandidateService, CandidateService>();
+builder.Services.AddScoped<IDocumentTypeService, DocumentTypeService>();
+builder.Services.AddScoped<IEmployeeDeadlineService, EmployeeDeadlineService>();
+builder.Services.AddScoped<IEmployeeDocumentService, EmployeeDocumentService>();
+builder.Services.AddScoped<IEmploymentService, EmploymentService>();
+builder.Services.AddScoped<IProjectHourService, ProjectHourService>();
+builder.Services.AddScoped<IVacationService, VacationService>();
+builder.Services.AddScoped<IVacationTypeService, VacationTypeService>();
+builder.Services.AddScoped<IWorkingHourService, WorkingHourService>();
 
 // add automapper
 builder.Services.AddAutoMapper(
     typeof(EmployeeProfile),
     typeof(PageProfile),
-    typeof(SkillProfile)
+    typeof(SkillProfile),
+    typeof(CandidateProfile),
+    typeof(DocumentTypeProfile),
+    typeof(EmployeeDeadlineProfile),
+    typeof(EmployeeDocumentProfile),
+    typeof(EmploymentProfile),
+    typeof(ProjectHourProfile),
+    typeof(VacationProfile),
+    typeof(VacationTypeProfile),
+    typeof(WorkingHourProfile)
     );
 
 
@@ -99,3 +117,5 @@ app.UseRouting();
 app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
 app.Run();
+
+public partial class Program { }

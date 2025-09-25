@@ -39,6 +39,7 @@ namespace HrDataAccess.Repositories
         public async Task DeleteAllAsync()
         {
             await Context.Set<T>().ForEachAsync(e => e.IsDeleted = true);
+            await Context.SaveChangesAsync();
         }
 
         public async Task<T> DeleteByIdAsync(Guid id)
