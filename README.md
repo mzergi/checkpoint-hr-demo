@@ -5,5 +5,6 @@ The application lets users create employees, skills, and other employee related 
 
 Current state: CRUD functionality of the API is verified by hand, however the current API tests are failing. This is what I am currently fixing.
 
-Copyright Máté Zergi and contributors, copying of contents is not allowed.
+Copyright (C) Máté Zergi and contributors. All rights reserved.
+
 
